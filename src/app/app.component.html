@@ -1,0 +1,7 @@
+<app-notifier></app-notifier>
+<div class="flex w-screen h-screen">
+  <app-sidebar *ngIf="showSidebar"></app-sidebar>
+  <div class="antialiased w-screen h-screen px-4 py-4">
+    <router-outlet></router-outlet>
+  </div>
+</div>

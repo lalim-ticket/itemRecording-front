@@ -1,0 +1,18 @@
+.card_button {
+  // background: gray;
+
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  border: solid;
+  border-radius: 1em;
+  border-color: #37464b;
+
+  transition: .3s ease;
+}
+
+.card_button:hover {
+  border-color: #4a565a;
+}

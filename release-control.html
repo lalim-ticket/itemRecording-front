@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Release Control</title>
+    <style>
+      table,
+      th,
+      td {
+        border: 1px solid black;
+      }
+
+      tr {
+        padding: 3px;
+      }
+
+      tr a {
+        all: unset;
+      }
+
+      tr a:hover {
+        color: rgb(52, 52, 218);
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      th {
+        background-color: rgb(238, 238, 238);
+      }
+
+      html * {
+        font-size: large;
+        font-family: 'Trebuchet MS', Helvetica, sans-serif;
+      }
+
+      body {
+        background-color: aliceblue;
+      }
+
+      a {
+        color: rgb(52, 52, 218);
+        cursor: pointer;
+      }
+
+      .red td {
+        background-color: #ed473e;
+      }
+
+      .orange td {
+        background-color: rgb(255, 166, 0);
+      }
+
+      .green td {
+        background-color: rgb(6, 137, 6);
+      }
+      .altered td {
+        background-color: rgb(253, 167, 181) !important;
+      }
+
+      .button {
+        background-color: rgb(238, 238, 238);
+        font-weight: bold;
+        font-size: large;
+        padding: 15px;
+        cursor: pointer;
+      }
+
+      .column-name {
+        font-size: large;
+        padding: 5px;
+      }
+
+      .lds-roller {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+      }
+      .lds-roller div {
+        animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        transform-origin: 40px 40px;
+      }
+      .lds-roller div:after {
+        content: ' ';
+        display: block;
+        position: absolute;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: black;
+        margin: -4px 0 0 -4px;
+      }
+      .lds-roller div:nth-child(1) {
+        animation-delay: -0.036s;
+      }
+      .lds-roller div:nth-child(1):after {
+        top: 63px;
+        left: 63px;
+      }
+      .lds-roller div:nth-child(2) {
+        animation-delay: -0.072s;
+      }
+      .lds-roller div:nth-child(2):after {
+        top: 68px;
+        left: 56px;
+      }
+      .lds-roller div:nth-child(3) {
+        animation-delay: -0.108s;
+      }
+      .lds-roller div:nth-child(3):after {
+        top: 71px;
+        left: 48px;
+      }
+      .lds-roller div:nth-child(4) {
+        animation-delay: -0.144s;
+      }
+      .lds-roller div:nth-child(4):after {
+        top: 72px;
+        left: 40px;
+      }
+      .lds-roller div:nth-child(5) {
+        animation-delay: -0.18s;
+      }
+      .lds-roller div:nth-child(5):after {
+        top: 71px;
+        left: 32px;
+      }
+      .lds-roller div:nth-child(6) {
+        animation-delay: -0.216s;
+      }
+      .lds-roller div:nth-child(6):after {
+        top: 68px;
+        left: 24px;
+      }
+      .lds-roller div:nth-child(7) {
+        animation-delay: -0.252s;
+      }
+      .lds-roller div:nth-child(7):after {
+        top: 63px;
+        left: 17px;
+      }
+      .lds-roller div:nth-child(8) {
+        animation-delay: -0.288s;
+      }
+      .lds-roller div:nth-child(8):after {
+        top: 56px;
+        left: 12px;
+      }
+      @keyframes lds-roller {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="instruction">
+      Please create and insert a
+      <a
+        href="https://github.com/settings/tokens/new?description=atisot-release-control&scopes=user,repo,read:repo_hook,read:org,read:public_key,read:gpg_key"
+        target="_blank"
+        >token</a
+      >
+      <br /><br />
+      Following rights are needed
+      <pre>
+    user
+    public_repo
+    repo
+    repo_deployment
+    repo:status
+    read:repo_hook
+    read:org
+    read:public_key
+    read:gpg_key</pre
+      >
+      <input type="password" id="token" style="margin-bottom: 10px" />
+    </div>
+    <input type="button" id="reset" value="RESET" class="button" />
+    <input type="button" id="go" value="LOAD" class="button" />
+    <h1>Total Repositories</h1>
+    <p id="total"></p>
+    <table>
+      <thead>
+        <th class="column-name">Repository</th>
+        <th class="column-name">Last push</th>
+        <th class="column-name">Is Pre-release</th>
+        <th class="column-name">Created at</th>
+        <th class="column-name">Latest version</th>
+        <th class="column-name">Prod version</th>
+      </thead>
+      <tbody id="tst"></tbody>
+    </table>
+    <script>
+      const tokenInput = document.getElementById('token');
+      console.log(tokenInput.value.length);
+      if (!tokenInput.value) {
+        tokenInput.value = localStorage.getItem('_GHtoken');
+      }
+      if (tokenInput.value.length) {
+        document.getElementById('instruction').style.display = 'none';
+      } else {
+        document.getElementById('instruction').style.display = 'block';
+      }
+      const reset = () => {
+        localStorage.removeItem('_GHtoken', token);
+        tokenInput.value = '';
+        location.reload();
+      };
+      const query = () => {
+        if (!tokenInput.value) {
+          document.getElementById('total').innerHTML = 'No token provided!';
+          return;
+        }
+
+        document.getElementById(
+          'total',
+        ).innerHTML = `<div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>`;
+        document.getElementById('tst').innerHTML = '';
+
+        const QUERY = (cursor) => `{
+            organization(login:"atisot") {
+                repositories(first:25${cursor ? `,after: "${cursor}"` : ''}) {
+
+                    totalCount
+                    nodes {
+                        isArchived
+                        isFork
+                        isTemplate
+                        name
+                        releases(orderBy: {
+                            field:CREATED_AT
+                            direction:DESC
+                        } first:50) {
+
+                            nodes {
+                            repository{
+                                defaultBranchRef{
+                                  target{
+                                    ... on Commit {
+                                      pushedDate
+                                    }
+                                  }
+                                }
+                              }
+                                isPrerelease
+                                createdAt
+                                publishedAt
+                                tag {
+                                    name
+                                }
+                            }
+                        }
+                    }
+                    pageInfo {
+                        startCursor
+                        endCursor
+                        hasNextPage
+                        hasPreviousPage
+                    }
+                }
+            }
+  }`;
+        const param = {
+          query: QUERY(),
+        };
+
+        const repositories = [];
+        const exclude_repositories = new Set(['localization']);
+
+        const go = () => {
+          var http = new XMLHttpRequest();
+          var url = 'https://api.github.com/graphql';
+          http.open('POST', url, true);
+
+          //Send the proper header information along with the request
+          http.setRequestHeader('Content-type', 'application/json');
+          //Send the proper header information along with the request
+          const token = tokenInput.value;
+          http.setRequestHeader('Authorization', `Bearer ${token}`);
+          localStorage.setItem('_GHtoken', token);
+          http.onreadystatechange = function () {
+            //Call a function when the state changes.
+            if (http.readyState == 4 && http.status == 200) {
+              const r = JSON.parse(http.responseText);
+              const filtered = r.data.organization.repositories.nodes.filter(
+                (f) => !f.isArchived && !f.isFork && !f.isTemplate && !exclude_repositories.has(f.name),
+              );
+              repositories.push(...filtered);
+
+              if (r.data.organization.repositories.pageInfo.hasNextPage) {
+                param.query = QUERY(r.data.organization.repositories.pageInfo.endCursor);
+                go();
+              } else {
+                render();
+              }
+            }
+          };
+          http.send(JSON.stringify(param));
+        };
+
+        const render = () => {
+          document.getElementById('total').innerHTML = repositories.length;
+          repositories.sort((a, b) => a.name.localeCompare(b.name));
+          repositories.forEach((repo) => {
+            const tr = document.createElement('tr');
+            const lastRelease = repo.releases.nodes[0];
+            const prodRelease = repo.releases.nodes.filter((f) => !f.isPrerelease)[0];
+            const latestDeployed = prodRelease ? prodRelease.tag.name === lastRelease.tag.name : false;
+            const pushedDate = lastRelease ? lastRelease.repository.defaultBranchRef.target.pushedDate : 'no';
+            console.log(lastRelease);
+            const lastCommitDate = 'test';
+            const preRelease = lastRelease ? lastRelease.isPrerelease : 'n.a.';
+            const createdAt = lastRelease ? lastRelease.publishedAt : 'n.a.';
+            const latest = lastRelease ? lastRelease.tag.name : 'n.a.';
+            const prodVersion = prodRelease ? prodRelease.tag.name : 'n.a.';
+            tr.className = prodRelease
+              ? prodRelease.tag.name === lastRelease.tag.name
+                ? `green`
+                : `orange`
+              : lastRelease
+              ? `orange`
+              : `red`;
+            if (pushedDate && new Date(pushedDate) > new Date(createdAt)) {
+              tr.className += ' altered';
+            }
+            tr.innerHTML = `<td><a target="_blank" href="https://github.com/atisot/${repo.name}">${repo.name}</td><td>${pushedDate}</td><td>${preRelease}</td><td>${createdAt}</td><td>${latest}</td><td>${prodVersion}</td>`;
+            document.getElementById('tst').appendChild(tr);
+          });
+        };
+
+        go();
+      };
+
+      document.getElementById('go').addEventListener('click', query);
+      document.getElementById('reset').addEventListener('click', reset);
+
+      query();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,59 @@
+{
+  "name": "frontend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "lint": "ng lint",
+    "lint:fix": "ng lint --fix"
+  },
+  "dependencies": {
+    "@angular/animations": "^15.1.5",
+    "@angular/common": "^15.1.5",
+    "@angular/compiler": "^15.1.5",
+    "@angular/core": "^15.1.5",
+    "@angular/forms": "^15.1.5",
+    "@angular/platform-browser": "^15.1.5",
+    "@angular/platform-browser-dynamic": "^15.1.5",
+    "@angular/router": "^15.1.5",
+    "@fortawesome/angular-fontawesome": "^0.12.1",
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/free-solid-svg-icons": "^6.3.0",
+    "@tailwindcss/typography": "^0.5.9",
+    "angular-notifier": "^12.0.0",
+    "ngx-autosize": "^2.0.4",
+    "ngx-infinite-scroll": "^15.0.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.5.0",
+    "zone.js": "~0.12.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^15.1.6",
+    "@angular-eslint/builder": "^15.2.1",
+    "@angular-eslint/eslint-plugin": "^15.2.1",
+    "@angular-eslint/eslint-plugin-template": "^15.2.1",
+    "@angular-eslint/schematics": "^15.2.1",
+    "@angular-eslint/template-parser": "^15.2.1",
+    "@angular/cli": "^15.1.6",
+    "@angular/compiler-cli": "^15.1.5",
+    "@tailwindcss/forms": "^0.5.3",
+    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/parser": "^5.52.0",
+    "autoprefixer": "^10.4.13",
+    "eslint": "^8.34.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-unicorn": "^45.0.2",
+    "postcss": "^8.4.21",
+    "prettier": "^2.8.4",
+    "tailwindcss": "^3.2.7",
+    "typescript": "~4.9.5"
+  },
+  "engines": {
+    "node": ">= 16",
+    "npm": ">= 8",
+    "yarn": ">= 1.13"
+  }
+}

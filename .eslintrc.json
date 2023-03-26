@@ -1,0 +1,87 @@
+{
+  "root": true,
+  "ignorePatterns": ["projects/**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:unicorn/recommended",
+        "plugin:prettier/recommended"
+      ],
+      "rules": {
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "app",
+            "style": "kebab-case"
+          }
+        ],
+        "@typescript-eslint/explicit-member-accessibility": [
+          "warn",
+          {
+            "accessibility": "explicit",
+            "overrides": {
+              "accessors": "explicit",
+              "constructors": "off",
+              "methods": "explicit",
+              "properties": "explicit",
+              "parameterProperties": "explicit"
+            },
+            "ignoredMethodNames": [
+              "ngOnChanges",
+              "ngOnInit",
+              "ngDoCheck",
+              "ngAfterContentInit",
+              "ngAfterContentChecked",
+              "ngAfterViewInit",
+              "ngAfterViewChecked",
+              "ngOnDestroy"
+            ]
+          }
+        ],
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/array-type": [
+          "warn",
+          {
+            "default": "array-simple"
+          }
+        ],
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "unicorn/prevent-abbreviations": "off",
+        "unicorn/prefer-top-level-await": "off",
+        "unicorn/no-null": "off",
+        "unicorn/no-array-reduce": "off",
+        "unicorn/catch-error-name": [
+          "error",
+          {
+            "name": "e"
+          }
+        ],
+        "unicorn/consistent-function-scoping": "off",
+        "prettier/prettier": "warn"
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended", "plugin:prettier/recommended"],
+      "rules": {
+        "prettier/prettier": ["warn", { "parser": "angular" }]
+      }
+    }
+  ]
+}

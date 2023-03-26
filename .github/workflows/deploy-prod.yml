@@ -1,0 +1,17 @@
+name: Deploy PROD
+
+on:
+  release:
+    types: [released]
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      stage: prod
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+      aws-access-key-secret: ${{ secrets.AWS_ACCESS_KEY_SECRET_PROD }}
+      aws-cloudfront-distribution-id: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID_PROD }}

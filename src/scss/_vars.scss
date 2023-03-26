@@ -1,0 +1,40 @@
+$enable-important-utilities: true !default;
+
+// Fonts
+$default-font: 'Rubik', sans-serif;
+
+// Breakpoints
+$container-padding: 20px;
+$container-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 767px,
+  lg: 1270px,
+  xl: 1430px,
+  xxl: 1680px,
+  xxxl: 1920px,
+  4xl: 2560px,
+);
+$container-max-width: (
+  xs: 0,
+  sm: 576px,
+  md: 767px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1370px,
+  xxxl: 1560px,
+  4xl: 1920px,
+);
+
+// Spacer
+$spacer: 1rem !default;
+$spacers: (
+  0: 0,
+  1: $spacer * 0.25,
+  2: $spacer * 0.5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
+) !default;
+
+@import '_mixins/breakpoints';
