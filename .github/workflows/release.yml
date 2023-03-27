@@ -1,8 +1,0 @@
-name: Create Pre-Release
-
-on:
-  workflow_dispatch:
-
-jobs:
-  release:
-    uses: atisot/shared-actions/.github/workflows/create-pre-release.yml@v2.0.0
