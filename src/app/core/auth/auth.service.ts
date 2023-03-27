@@ -14,6 +14,17 @@ interface AuthData {
   };
 }
 
+interface RegisterData {
+  _id: string;
+  username: string;
+  roles: string[];
+}
+
+interface UserData {
+  username: string;
+  password: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -36,23 +47,25 @@ export class AuthService {
     }
   }
 
-  public login(data: { username: string; password: string }) {
-    return this.http
-      .post<AuthData>(`${environment.apiUrl}/auth/login`, { username: data.username, password: data.password })
-      .pipe(
-        first(),
-        tap((response) => {
-          this.setAccessToken(response.accessToken);
-          this.setUser(response.user);
-          this.user$.next(response.user);
-        }),
-      );
+  public login(data: UserData) {
+    return this.http.post<AuthData>(`${environment.apiUrl}/auth/login`, { ...data }).pipe(
+      first(),
+      tap((response) => {
+        this.setAccessToken(response.accessToken);
+        this.setUser(response.user);
+        this.user$.next(response.user);
+      }),
+    );
   }
 
   private validateToken() {
     return this.http.get<{ userId: string; username: string; roles: string[] }>(`${environment.apiUrl}/auth/profile`, {
       headers: { Authorization: `Bearer ${this.getAccessToken()}` },
     });
+  }
+
+  public register(data: UserData) {
+    return this.http.post<RegisterData>(`${environment.apiUrl}/users`, { ...data }).pipe(first());
   }
 
   public async logout() {

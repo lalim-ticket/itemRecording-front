@@ -29,7 +29,6 @@ export class LoginComponent {
       Validators.maxLength(32),
       Validators.pattern(/((?=.*\d)(?=.*[A-Za-z]).*$)/),
     ]),
-    rememberMe: new FormControl(true),
   });
 
   public async login() {
