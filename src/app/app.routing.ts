@@ -19,6 +19,14 @@ export const routes: Routes = [
   },
 
   {
+    path: 'register',
+    canActivate: [NoAuthGuard],
+    canActivateChild: [NoAuthGuard],
+    loadComponent: () => import('@core/auth/components/register/register.component').then((c) => c.RegisterComponent),
+    data: { showSidebar: false },
+  },
+
+  {
     path: 'logout',
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
