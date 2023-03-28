@@ -1,0 +1,8 @@
+<p class="flex justify-center">Groups</p>
+<div class="d-flex mt-2 text-sm">
+  <app-card *ngFor="let group of groups">
+    <div>Name: {{ group.name }}</div>
+    <div>Description: {{ group.description }}</div>
+    <div>Owner: {{ group.owner.username }}</div>
+  </app-card>
+</div>
