@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '@environment';
@@ -59,9 +59,21 @@ export class AuthService {
   }
 
   private validateToken() {
-    return this.http.get<{ userId: string; username: string; roles: string[] }>(`${environment.apiUrl}/auth/profile`, {
-      headers: { Authorization: `Bearer ${this.getAccessToken()}` },
-    });
+    return this.http
+      .get<{ userId: string; username: string; roles: string[] }>(`${environment.apiUrl}/auth/profile`, {
+        headers: { Authorization: `Bearer ${this.getAccessToken()}` },
+      })
+      .pipe(
+        first(),
+        tap({
+          next: (response) => {
+            this.user$.next(response);
+          },
+          error: (e: HttpErrorResponse) => {
+            if (e.status === 401) this.logout();
+          },
+        }),
+      );
   }
 
   public register(data: UserData) {
