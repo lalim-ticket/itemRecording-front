@@ -7,7 +7,7 @@ import { RolesGuard } from '@core/auth/guards/roles.guard';
 import { faHouse } from '@fortawesome/free-solid-svg-icons';
 
 export const routes: Routes = [
-  { path: '/', pathMatch: 'full', redirectTo: 'dashboard/home' },
+  { path: '', pathMatch: 'full', redirectTo: 'dashboard/home' },
   { path: 'login-redirect', pathMatch: 'full', redirectTo: 'dashboard/home' },
 
   {
@@ -38,6 +38,7 @@ export const routes: Routes = [
     path: 'dashboard',
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
+    data: { showSidebar: false },
     children: [
       {
         path: 'home',
