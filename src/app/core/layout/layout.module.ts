@@ -6,7 +6,9 @@ import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NotifierModule } from 'angular-notifier';
 import { CardComponent } from './card/card.component';
+import { GradientButtonComponent } from './gradientButton/gradient-button.component';
 import { LoadingComponent } from './loading/loading.component';
+import { ModalComponent } from './modal/modal.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { NotifierComponent } from './notifier/notifier.component';
 import { NotifierInterceptor } from './notifier/notifier.interceptor';
@@ -29,8 +31,24 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     }),
     FontAwesomeModule,
   ],
-  exports: [NotifierComponent, SidebarComponent, NavbarComponent, CardComponent, LoadingComponent],
-  declarations: [NotifierComponent, SidebarComponent, NavbarComponent, CardComponent, LoadingComponent],
+  exports: [
+    NotifierComponent,
+    SidebarComponent,
+    NavbarComponent,
+    CardComponent,
+    LoadingComponent,
+    GradientButtonComponent,
+    ModalComponent,
+  ],
+  declarations: [
+    NotifierComponent,
+    SidebarComponent,
+    NavbarComponent,
+    CardComponent,
+    LoadingComponent,
+    GradientButtonComponent,
+    ModalComponent,
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
