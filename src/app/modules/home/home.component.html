@@ -1,4 +1,6 @@
-<p class="flex justify-center">Groups</p>
+<p class="flex justify-center">
+  <app-gradient-button class="bg-neutral-800 rounded-full cursor-pointer">Create group</app-gradient-button>
+</p>
 <div class="d-flex mt-2 text-sm">
   <app-card *ngFor="let group of groups">
     <div>Name: {{ group.name }}</div>
@@ -6,3 +8,5 @@
     <div>Owner: {{ group.owner.username }}</div>
   </app-card>
 </div>
+
+<app-modal> </app-modal>
