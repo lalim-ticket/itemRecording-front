@@ -10,3 +10,8 @@ export interface IGroup {
   items: IItem[];
   createdAt: Date;
 }
+
+export interface IGroupCreate {
+  name: string;
+  description: string;
+}
