@@ -3,6 +3,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { notifierConfig } from '@core/configs/notifier.config';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NotifierModule } from 'angular-notifier';
 import { CardComponent } from './card/card.component';
@@ -15,22 +16,7 @@ import { NotifierInterceptor } from './notifier/notifier.interceptor';
 import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    NotifierModule.withConfig({
-      position: {
-        horizontal: { position: 'right', distance: 12 },
-        vertical: { position: 'top', distance: 12, gap: 10 },
-      },
-      behaviour: {
-        autoHide: 10_000,
-        stacking: 5,
-      },
-    }),
-    FontAwesomeModule,
-  ],
+  imports: [CommonModule, RouterModule, FormsModule, NotifierModule.withConfig(notifierConfig), FontAwesomeModule],
   exports: [
     NotifierComponent,
     SidebarComponent,
