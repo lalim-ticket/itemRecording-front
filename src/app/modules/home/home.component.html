@@ -1,12 +1,56 @@
-<p class="flex justify-center">
-  <app-gradient-button class="bg-neutral-800 rounded-full cursor-pointer">Create group</app-gradient-button>
+<app-notifier></app-notifier>
+<p class="flex justify-center text-gray-200">
+  <app-gradient-button (click)="toggleModal()" class="bg-neutral-800 rounded-full cursor-pointer"
+    >Create group</app-gradient-button
+  >
 </p>
-<div class="d-flex mt-2 text-sm">
-  <app-card *ngFor="let group of groups">
+<div class="d-flex mt-2 text-gray-200">
+  <app-card *ngFor="let group of groups" routerLink="../group/{{ group._id }}">
     <div>Name: {{ group.name }}</div>
-    <div>Description: {{ group.description }}</div>
     <div>Owner: {{ group.owner.username }}</div>
   </app-card>
 </div>
 
-<app-modal> </app-modal>
+<app-modal [show]="showModal">
+  <h3 header class="text-3xl font-semibold">Create new group</h3>
+  <div body>
+    <div>
+      <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+      <input
+        type="text"
+        id="first_name"
+        class="bg-gray-50 border border-purple-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-fuchsia-500 block w-full p-2.5 dark:bg-gray-700 dark:border-purple-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-fuchsia-500"
+        placeholder="Atisot"
+        [(ngModel)]="groupName"
+        required
+      />
+    </div>
+    <div class="mt-4">
+      <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+      <textarea
+        id="message"
+        rows="4"
+        class="resize-none block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-purple-700 focus:ring-blue-500 focus:border-fuchsia-500 dark:bg-gray-700 dark:border-purple-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-fuchsia-500"
+        placeholder="My favorite band..."
+        [(ngModel)]="groupDescription"
+        required
+      ></textarea>
+    </div>
+  </div>
+  <div footer>
+    <button
+      class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+      type="button"
+      (click)="toggleModal()"
+    >
+      Close
+    </button>
+    <button
+      class="bg-purple-800 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+      type="button"
+      (click)="buttonCreate()"
+    >
+      Create
+    </button>
+  </div>
+</app-modal>
