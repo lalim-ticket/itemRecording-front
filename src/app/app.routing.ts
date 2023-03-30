@@ -50,6 +50,16 @@ export const routes: Routes = [
           icon: faHouse,
         },
       },
+      {
+        path: 'group',
+        loadChildren: () => import('@modules/group/group.module').then((m) => m.GroupModule),
+        canActivate: [RolesGuard],
+        data: {
+          roles: [UserGroup.USER],
+          name: 'Group',
+          icon: faHouse,
+        },
+      },
     ],
   },
 ];
