@@ -1,6 +1,137 @@
-<div class="h-full flex flex-row">
-  <div class="h-full p-3 text-center w-60 text-gray-200 bg-zinc-800 rounded-2xl">
-    <h3 header class="text-3xl font-semibold">Group</h3>
+<div *ngIf="group" class="h-full flex flex-row">
+  <div class="h-full p-3 flex flex-col justify-between text-center w-60 text-gray-200 bg-zinc-800 rounded-2xl">
+    <div>
+      <h3 class="text-3xl font-semibold">{{ group.name }}</h3>
+      <div class="mt-2 text-sm text-gray-400 font-semibold">{{ group.description }}</div>
+      <h3 class="mt-4 text-2xl font-semibold">users</h3>
+      <div *ngFor="let user of group.users">
+        <button
+          (click)="deleteUser(user.username)"
+          data-tooltip-target="tooltip-default"
+          class="mt-2 text-sm text-gray-400 font-semibold"
+        >
+          {{ user.username }}
+        </button>
+      </div>
+    </div>
+    <div>
+      <button
+        type="button"
+        class="w-full text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+      >
+        History
+      </button>
+      <button
+        type="button"
+        class="w-full text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+        (click)="toggleItemModal()"
+      >
+        Add item
+      </button>
+      <button
+        type="button"
+        class="w-full text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+        (click)="toggleUsersModal()"
+      >
+        Add user
+      </button>
+      <button
+        routerLink="../../home"
+        type="button"
+        class="mt-4 w-full text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+        Back
+      </button>
+    </div>
   </div>
-  <div>fewfwe</div>
+  <div class="h-full p-3 flex">
+    <app-card *ngFor="let item of group.items">
+      <div>Name: {{ item.name }}</div>
+      <div>Description: {{ item.description }}</div>
+      <div>Count: {{ item.count }}</div>
+    </app-card>
+  </div>
 </div>
+
+<!-- Item modal -->
+<app-modal *ngIf="group" [show]="showCreateItemModal">
+  <h3 header class="text-3xl font-semibold">Create Item</h3>
+  <div body>
+    <div>
+      <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+      <input
+        type="text"
+        id="first_name"
+        class="bg-gray-50 border border-purple-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-fuchsia-500 block w-full p-2.5 dark:bg-gray-700 dark:border-purple-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-fuchsia-500"
+        placeholder="PlayStation"
+        [(ngModel)]="itemName"
+        required
+      />
+    </div>
+    <div>
+      <label for="first_name" class="mt-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >Description</label
+      >
+      <input
+        type="text"
+        id="first_name"
+        class="bg-gray-50 border border-purple-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-fuchsia-500 block w-full p-2.5 dark:bg-gray-700 dark:border-purple-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-fuchsia-500"
+        placeholder="Large description a console"
+        [(ngModel)]="itemDescription"
+        required
+      />
+    </div>
+  </div>
+  <div footer>
+    <button
+      footer
+      class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+      type="button"
+      (click)="toggleItemModal()"
+    >
+      Close
+    </button>
+    <button
+      class="bg-purple-800 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+      type="button"
+      (click)="createItem()"
+    >
+      Create
+    </button>
+  </div>
+</app-modal>
+
+<!-- User modal -->
+<app-modal *ngIf="group" [show]="showAddUserModal">
+  <h3 header class="text-3xl font-semibold">Users</h3>
+  <div body>
+    <div>
+      <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+      <input
+        type="text"
+        id="first_name"
+        class="bg-gray-50 border border-purple-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-fuchsia-500 block w-full p-2.5 dark:bg-gray-700 dark:border-purple-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-fuchsia-500"
+        placeholder="Jorge"
+        [(ngModel)]="username"
+        required
+      />
+    </div>
+  </div>
+  <div footer>
+    <button
+      footer
+      class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+      type="button"
+      (click)="toggleUsersModal()"
+    >
+      Close
+    </button>
+    <button
+      class="bg-purple-800 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+      type="button"
+      (click)="addUser()"
+    >
+      Add
+    </button>
+  </div>
+</app-modal>
