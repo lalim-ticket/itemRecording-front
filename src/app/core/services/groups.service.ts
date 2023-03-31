@@ -14,7 +14,19 @@ export class GroupsService {
     return this.http.get<IGroup[]>(baseUrl).pipe(httpRetry());
   }
 
+  public getByGroupId(groupId: string) {
+    return this.http.get<IGroup>(`${baseUrl}/${groupId}`).pipe(httpRetry());
+  }
+
+  public addUser(username: string, groupId: string) {
+    return this.http.post(`${baseUrl}/user`, { username, groupId });
+  }
+
+  public deleteUser(username: string, groupId: string) {
+    return this.http.delete(`${baseUrl}/user`, { body: { username, groupId } });
+  }
+
   public create(groupCreateDto: IGroupCreate) {
-    return this.http.post<IGroup>(baseUrl, groupCreateDto).pipe(httpRetry());
+    return this.http.post<IGroup>(baseUrl, groupCreateDto);
   }
 }
