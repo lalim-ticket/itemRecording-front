@@ -5,6 +5,7 @@ import { Route, RouterModule } from '@angular/router';
 import { notifierConfig } from '@core/configs/notifier.config';
 import { LayoutModule } from '@core/layout/layout.module';
 import { GroupsService } from '@core/services/groups.service';
+import { ItemsService } from '@core/services/items.service';
 import { NotifierModule } from 'angular-notifier';
 import { GroupComponent } from './group.component';
 
@@ -25,6 +26,6 @@ const routes: Route[] = [
     LayoutModule,
     NotifierModule.withConfig(notifierConfig),
   ],
-  providers: [GroupsService],
+  providers: [GroupsService, ItemsService],
 })
 export class GroupModule {}
