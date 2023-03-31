@@ -6,3 +6,9 @@ export interface IItem {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IItemCreate {
+  name: string;
+  description?: string;
+  groupId: string;
+}
