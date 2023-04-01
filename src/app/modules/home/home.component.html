@@ -4,7 +4,7 @@
     >Create group</app-gradient-button
   >
 </p>
-<div class="d-flex mt-2 text-gray-200">
+<div class="flex flex-wrap h-max mt-2 text-gray-200">
   <app-card *ngFor="let group of groups" routerLink="../group/{{ group._id }}">
     <div>Name: {{ group.name }}</div>
     <div>Owner: {{ group.owner.username }}</div>
