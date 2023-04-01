@@ -8,7 +8,14 @@ export interface IItem {
 }
 
 export interface IItemCreate {
-  name: string;
+  name?: string;
   description?: string;
+  count?: number;
   groupId: string;
+}
+
+export interface IItemUpdate {
+  name?: string;
+  description?: string;
+  count?: number;
 }
