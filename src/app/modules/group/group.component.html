@@ -18,6 +18,7 @@
       <button
         type="button"
         class="w-full text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+        (click)="openHistoryModal()"
       >
         History
       </button>
@@ -44,8 +45,8 @@
       </button>
     </div>
   </div>
-  <div class="h-full p-3 flex">
-    <app-card *ngFor="let item of group.items">
+  <div class="p-3 flex flex-wrap h-max justify-start">
+    <app-card (click)="selectItem(item._id)" *ngFor="let item of group.items">
       <div>Name: {{ item.name }}</div>
       <div>Description: {{ item.description }}</div>
       <div>Count: {{ item.count }}</div>
@@ -53,7 +54,100 @@
   </div>
 </div>
 
-<!-- Item modal -->
+<!-- History modal -->
+<app-modal *ngIf="history" [show]="showHistoryModal" class="text-sm">
+  <h3 header class="text-3xl font-semibold">History</h3>
+  <div body class="w-full">
+    <div class="flex flex-wrap w-full h-96 overflow-auto justify-center">
+      <app-card *ngFor="let i of history">
+        <div>Status: {{ i.status }}</div>
+        <div *ngIf="i.newValue">New value: {{ i.newValue }}</div>
+        <div *ngIf="i.oldValue">Old value: {{ i.oldValue }}</div>
+        <div>Item name: {{ i.item.name }}</div>
+        <div>User: {{ i.user.username }}</div>
+        <div class="text-xs text-gray-400">Created At: {{ i.createdAt }}</div>
+      </app-card>
+    </div>
+    <div></div>
+  </div>
+  <div footer>
+    <button
+      footer
+      class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+      type="button"
+      (click)="toggleHistoryModal()"
+    >
+      Close
+    </button>
+    <button
+      class="bg-purple-800 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+      type="button"
+      (click)="listHistory()"
+    >
+      Get more
+    </button>
+  </div>
+</app-modal>
+
+<!-- Update item modal -->
+<app-modal *ngIf="selectedItem" [show]="showEditItemModal">
+  <h3 header class="text-3xl font-semibold">Item: {{ selectedItem.name }}</h3>
+  <div body>
+    <div>
+      <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+      <input
+        type="text"
+        id="first_name"
+        class="bg-gray-50 border border-purple-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-fuchsia-500 block w-full p-2.5 dark:bg-gray-700 dark:border-purple-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-fuchsia-500"
+        placeholder="PlayStation"
+        [(ngModel)]="selectedItem.name"
+        required
+      />
+    </div>
+    <div>
+      <label for="first_name" class="mt-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >Description</label
+      >
+      <input
+        type="text"
+        id="first_name"
+        class="bg-gray-50 border border-purple-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-fuchsia-500 block w-full p-2.5 dark:bg-gray-700 dark:border-purple-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-fuchsia-500"
+        placeholder="Large description a console"
+        [(ngModel)]="selectedItem.description"
+      />
+    </div>
+    <div>
+      <label for="first_name" class="mt-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Count</label>
+      <input
+        type="number"
+        id="first_name"
+        class="bg-gray-50 border border-purple-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-fuchsia-500 block w-full p-2.5 dark:bg-gray-700 dark:border-purple-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-fuchsia-500"
+        placeholder="Count items"
+        [(ngModel)]="selectedItem.count"
+        required
+      />
+    </div>
+  </div>
+  <div footer>
+    <button
+      footer
+      class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+      type="button"
+      (click)="closeUpdateItemModal()"
+    >
+      Close
+    </button>
+    <button
+      class="bg-purple-800 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+      type="button"
+      (click)="updateItem()"
+    >
+      Save
+    </button>
+  </div>
+</app-modal>
+
+<!-- Add item modal -->
 <app-modal *ngIf="group" [show]="showCreateItemModal">
   <h3 header class="text-3xl font-semibold">Create Item</h3>
   <div body>
@@ -78,6 +172,16 @@
         class="bg-gray-50 border border-purple-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-fuchsia-500 block w-full p-2.5 dark:bg-gray-700 dark:border-purple-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-fuchsia-500"
         placeholder="Large description a console"
         [(ngModel)]="itemDescription"
+      />
+    </div>
+    <div>
+      <label for="first_name" class="mt-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Count</label>
+      <input
+        type="number"
+        id="first_name"
+        class="bg-gray-50 border border-purple-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-fuchsia-500 block w-full p-2.5 dark:bg-gray-700 dark:border-purple-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-fuchsia-500"
+        placeholder="Count items"
+        [(ngModel)]="itemCount"
         required
       />
     </div>
@@ -101,7 +205,7 @@
   </div>
 </app-modal>
 
-<!-- User modal -->
+<!-- Add user modal -->
 <app-modal *ngIf="group" [show]="showAddUserModal">
   <h3 header class="text-3xl font-semibold">Users</h3>
   <div body>
